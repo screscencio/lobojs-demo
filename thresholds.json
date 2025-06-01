@@ -1,0 +1,5 @@
+{
+  "jsonplaceholder_posts": 300,
+  "jsonplaceholder_comments": 100,
+  "httpbin_get": 50
+}

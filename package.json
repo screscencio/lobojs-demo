@@ -1,0 +1,16 @@
+{
+  "name": "lobojs-demo",
+  "version": "0.1.0",
+  "description": "Demo project showcasing LoboJS profiling of public API endpoints",
+  "scripts": {
+    "perf:run": "lobo run profiles -o report/run.json",
+    "perf:report": "lobo report report/run.json -o report",
+    "perf:ci": "lobo ci -p profiles -o report -t thresholds.json"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "lobojs": "file:../lobojs"
+  }
+}
