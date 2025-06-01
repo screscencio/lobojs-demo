@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "description": "Demo project showcasing LoboJS profiling of public API endpoints",
   "scripts": {
-    "perf:run": "lobo run profiles -o report/run.json",
-    "perf:report": "lobo report report/run.json -o report",
-    "perf:ci": "lobo ci -p profiles -o report -t thresholds.json"
+    "perf:run": "lobo run profiles",
+    "perf:merge": "lobo merge profile_runs/ -o report/lobojs-merged.json",
+    "perf:report": "lobo report report/lobojs-merged.json -o report",
+    "perf:evaluate": "lobo evaluate report/lobojs-merged.json -t thresholds.json",
+    "perf:ci": "lobo ci -p profiles -t thresholds.json"
   },
   "engines": {
     "node": ">=18"

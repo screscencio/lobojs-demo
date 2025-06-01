@@ -14,25 +14,47 @@ npm install
 
 ## Running the Demo
 
-Profile public APIs (writes to `report/run.json`):
+Profile public APIs (writes timestamped JSON runs into `profile_runs/`):
 
 ```bash
 npm run perf:run
 ```
 
-Generate report (reads from `report/run.json`, outputs to `report/`):
+Merge all runs into a single merged history (`report/lobojs-merged.json`):
+
+```bash
+npm run perf:merge
+```
+
+Generate report (reads merged JSON and outputs HTML + summary under `report/`):
 
 ```bash
 npm run perf:report
 ```
 
-Run full CI pipeline (profile → merge → report → evaluate thresholds from `thresholds.json`):
+Run full CI pipeline (profile → merge → report → evaluate thresholds; `eval` runs last):
 
 ```bash
 npm run perf:ci
 ```
 
 After running, open `report/index.html` in your browser to view the interactive charts.
+
+## CI/CD Persistence
+
+In CI/CD pipelines, commit the merged JSON and report outputs to preserve your performance history:
+
+```bash
+git add report/lobojs-merged.json report/index.html
+git commit -m "ci: update performance history"
+```
+
+If you prefer to retain raw per-run snapshots (`profile_runs/`), you can also commit that directory; note that it may grow indefinitely over time.
+## Evaluate merged results independently
+
+```bash
+npm run perf:evaluate
+```
 
 ## Profiles
 

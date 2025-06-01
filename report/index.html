@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LoboJS Performance Report</title>
+  <style>
+    body {
+      background-color: #191924; /* steelGray */
+      color: #606078;           /* leanItFontColor */
+      font-family: 'Quicksand', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #ff8010;           /* leanit101Orange */
+      margin-bottom: 5px;
+    }
+    h2 {
+      color: #ff8010;
+      margin-top: 20px;
+      margin-bottom: 5px;
+    }
+    #chart {
+      margin-top: 20px;
+    }
+    .axis path,
+    .axis line {
+      stroke: #4a4a5b;         /* leanItBackgroundLight */
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <h1>Performance Report</h1>
+  <p>Generated at <time id="reportDate"></time></p>
+  <div id="chart"></div>
+  <script>
+    const summary = {"reportedAt":"2025-06-01T02:10:31.051Z","source":"merged.json","metrics":[{"name":"jsonplaceholder_posts","duration":null,"stats":{"count":19,"min":242.44366599999998,"max":640.1672500000001,"avg":323.4622301578948},"durations":[622.415708,328.952458,338.512875,243.090708,332.599042,640.1672500000001,244.36450000000002,277.96133299999997,246.821792,245.811417,624.849041,242.44366599999998,258.85650000000004,259.238583,245.06962500000003,245.6605,251.408458,251.97291700000002,245.586],"timestamps":["2025-06-01T02:01:48.314Z","2025-06-01T02:01:53.446Z","2025-06-01T02:01:57.056Z","2025-06-01T02:01:59.664Z","2025-06-01T02:02:02.091Z","2025-06-01T02:06:07.380Z","2025-06-01T02:06:09.979Z","2025-06-01T02:06:11.832Z","2025-06-01T02:06:14.166Z","2025-06-01T02:06:16.243Z","2025-06-01T02:09:38.683Z","2025-06-01T02:09:45.413Z","2025-06-01T02:09:56.256Z","2025-06-01T02:10:03.340Z","2025-06-01T02:10:05.750Z","2025-06-01T02:10:18.891Z","2025-06-01T02:10:21.708Z","2025-06-01T02:10:23.390Z","2025-06-01T02:10:25.234Z"]},{"name":"jsonplaceholder_comments","duration":null,"stats":{"count":19,"min":33.202833,"max":49.72708399999999,"avg":37.42339910526315},"durations":[49.72708399999999,35.114584000000036,40.976999999999975,35.294291999999984,37.921333000000004,36.513624999999934,37.75733399999996,37.957041000000004,40.787125,36.98595799999998,36.708624999999984,34.03883400000001,37.843166,40.12133299999999,35.314209000000005,36.04166600000002,33.202833,34.017291,34.72125],"timestamps":["2025-06-01T02:01:48.314Z","2025-06-01T02:01:53.446Z","2025-06-01T02:01:57.056Z","2025-06-01T02:01:59.664Z","2025-06-01T02:02:02.091Z","2025-06-01T02:06:07.380Z","2025-06-01T02:06:09.979Z","2025-06-01T02:06:11.832Z","2025-06-01T02:06:14.166Z","2025-06-01T02:06:16.243Z","2025-06-01T02:09:38.683Z","2025-06-01T02:09:45.413Z","2025-06-01T02:09:56.256Z","2025-06-01T02:10:03.340Z","2025-06-01T02:10:05.750Z","2025-06-01T02:10:18.891Z","2025-06-01T02:10:21.708Z","2025-06-01T02:10:23.390Z","2025-06-01T02:10:25.234Z"]},{"name":"httpbin_get","duration":null,"stats":{"count":19,"min":576.270458,"max":1026.146333,"avg":686.8201623157893},"durations":[752.0019580000001,1026.146333,622.320042,600.398917,617.1621250000001,590.611584,690.2619589999999,644.4120829999999,637.0598339999999,863.8692910000001,593.458083,765.4378749999998,588.81325,576.270458,766.8070829999999,759.1614999999999,611.879792,613.540084,729.9708330000001],"timestamps":["2025-06-01T02:01:48.314Z","2025-06-01T02:01:53.446Z","2025-06-01T02:01:57.056Z","2025-06-01T02:01:59.664Z","2025-06-01T02:02:02.091Z","2025-06-01T02:06:07.380Z","2025-06-01T02:06:09.979Z","2025-06-01T02:06:11.832Z","2025-06-01T02:06:14.166Z","2025-06-01T02:06:16.243Z","2025-06-01T02:09:38.683Z","2025-06-01T02:09:45.413Z","2025-06-01T02:09:56.256Z","2025-06-01T02:10:03.340Z","2025-06-01T02:10:05.750Z","2025-06-01T02:10:18.891Z","2025-06-01T02:10:21.708Z","2025-06-01T02:10:23.390Z","2025-06-01T02:10:25.234Z"]}]};
+
+    document.getElementById('reportDate').textContent = summary.reportedAt;
+    const metrics = summary.metrics;
+
+    metrics.forEach(m => {
+      const durations = m.durations || (m.duration != null ? [m.duration] : []);
+      const timestamps = m.timestamps || [];
+      const data = durations.map((value, i) => ({
+        timestamp: timestamps[i],
+        value,
+      }));
+
+      const spec = {
+        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+        description: m.name,
+        width: 800,
+        height: 400,
+        background: 'transparent',
+        data: { values: data },
+        selection: {
+          grid: { type: 'interval', bind: 'scales' }
+        },
+        config: {
+          axis: { labelColor: '#606078', titleColor: '#606078' },
+          view: { stroke: 'transparent' }
+        },
+        layer: [
+          {
+            mark: { type: 'area', interpolate: 'monotone', color: '#4a4a5b', opacity: 0.3 }
+          },
+          {
+            mark: { type: 'line', interpolate: 'monotone', color: '#ff8010', strokeWidth: 2 }
+          },
+          {
+            mark: { type: 'rule', color: '#0e7597', strokeWidth: 1, strokeDash: [2,2] },
+            encoding: { y: { aggregate: 'min', field: 'value' } }
+          },
+          {
+            mark: { type: 'rule', color: '#06485d', strokeWidth: 1, strokeDash: [2,2] },
+            encoding: { y: { aggregate: 'max', field: 'value' } }
+          },
+          {
+            mark: { type: 'rule', color: '#606078', strokeWidth: 1, strokeDash: [4,2] },
+            encoding: { y: { aggregate: 'mean', field: 'value' } }
+          }
+        ],
+        encoding: {
+          x: {
+            field: 'timestamp', type: 'temporal', title: 'Timestamp',
+            axis: { format: '%Y-%m-%d %H:%M:%S', labelAngle: -45 }
+          },
+          y: { field: 'value', type: 'quantitative', title: 'Duration (ms)' },
+          tooltip: [
+            { field: 'timestamp', type: 'temporal', title: 'Time' },
+            { field: 'value', type: 'quantitative', title: 'Duration' }
+          ]
+        }
+      };
+
+      // prepend metric name as a heading for clarity
+      const chartContainer = document.getElementById('chart');
+      const titleElem = document.createElement('h2');
+      titleElem.textContent = m.name;
+      chartContainer.appendChild(titleElem);
+
+      const chartDiv = document.createElement('div');
+      chartDiv.style.marginTop = '20px';
+      chartContainer.appendChild(chartDiv);
+
+      vegaEmbed(chartDiv, spec, { renderer: 'canvas', actions: false })
+        .catch(console.error);
+    });
+  </script>
+</body>
+</html>
