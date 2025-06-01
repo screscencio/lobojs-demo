@@ -50,6 +50,7 @@ git commit -m "ci: update performance history"
 ```
 
 If you prefer to retain raw per-run snapshots (`profile_runs/`), you can also commit that directory; note that it may grow indefinitely over time.
+
 ## Evaluate merged results independently
 
 ```bash
@@ -61,3 +62,9 @@ npm run perf:evaluate
 The `profiles/` directory contains JavaScript files that use LoboJS’s `profile` API to measure HTTP request durations.
 
 Feel free to modify or add your own endpoints in `profiles/`.
+
+---
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](./LICENSE) file for details.

@@ -13,6 +13,6 @@
     "node": ">=18"
   },
   "dependencies": {
-    "lobojs": "file:../lobojs"
+    "lobojs": "^1.0.0"
   }
 }
